@@ -65,17 +65,23 @@ fn add_contact(contacts: &mut HashMap<String, u64>, name: String) {
     let phone: String = read_input("Phone: ");
     let phone = phone.trim();
 
-    if phone == "q" {
-        contact_book(contacts);
-    } else if phone.len() > 11 {
-        println!("Phone number is too long.");
-    } else if phone.parse::<u64>().is_ok() {
-        contacts.insert(name, phone.parse().unwrap());
-        println!("Contact added successfully.");
-        contact_book(contacts);
-    } else {
-        println!("Phone number is invalid.");
-        add_contact(contacts, name);
+    match phone {
+        "q" => contact_book(contacts),
+        _ if phone.len() > 11 => {
+            println!("Phone number is too long.");
+            add_contact(contacts, name);
+        },
+        _ => match phone.parse::<u64>() {
+            Ok(parsed_phone) => {
+                contacts.insert(name, parsed_phone);
+                println!("Contact added successfully.");
+                contact_book(contacts);
+            },
+            Err(_) => {
+                println!("Phone number is invalid.");
+                add_contact(contacts, name);
+            }
+        }
     }
 }
 
