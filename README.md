@@ -13,12 +13,14 @@ This is a simple command-line contact book application written in Rust. It allow
 1. Clone the repository.
 2. Run the application with `cargo run`.
 3. Follow the on-screen instructions to interact with the contact book.
+```
 Contact Book
 ╔═══════════════════════════╗
 ║ 1. Create     4. Edit     ║
 ║ 2. Search     5. Delete   ║
 ║ 3. List       q. Exit     ║
 ╚═══════════════════════════╝
+```
 4. Select and option by entering the corresponding number or `q` to exit the application.
 
 ## Example
