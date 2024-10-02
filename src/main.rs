@@ -43,18 +43,21 @@ fn contact_book(contacts: &mut HashMap<String, u64>) {
 }
 
 fn create(contacts: &mut HashMap<String, u64>) {
-    let name: String = read_input("Name: ");
-    
-    if name.is_empty() {
-        println!("Name is required.");
-        create(contacts);
-    } else if name == "q" {
-        contact_book(contacts);
-    } else if !contacts.contains_key(&name) {
-        add_contact(contacts, name);
-    } else {
-        println!("Contact already exists.");
-        create(contacts);
+    loop {
+        let name: String = read_input("Name: ");
+        
+        match name.as_str() {
+            "" => println!("Name is required."),
+            "q" => {
+                contact_book(contacts);
+                break;
+            },
+            _ if !contacts.contains_key(&name) => {
+                add_contact(contacts, name);
+                break;
+            },
+            _ => println!("Contact already exists."),
+        }
     }
 }
 
