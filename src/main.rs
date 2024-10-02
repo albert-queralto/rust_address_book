@@ -89,26 +89,32 @@ fn search(contacts: &mut HashMap<String, u64>) {
     println!("Search contact");
     let name: String = read_input("Name: ");
     
-    if name.is_empty() {
-        println!("Name is required.");
-        search(contacts);
-    } else if name == "q" {
-        contact_book(contacts);
-    } else if let Some(phone) = contacts.get(&name) {
-        println!("Name: {} - Phone: {}", name, phone);
-        contact_book(contacts);
-    } else {
-        println!("Contact not found.");
-        search(contacts);
+    match name.as_str() {
+        "" => {
+            println!("Name is required.");
+            search(contacts);
+        },
+        "q" => contact_book(contacts),
+        _ => match contacts.get(&name) {
+            Some(phone) => {
+                println!("Name: {} - Phone: {}", name, phone);
+                contact_book(contacts);
+            },
+            None => {
+                println!("Contact not found.");
+                search(contacts);
+            }
+        }
     }
 }
 
 fn list(contacts: &mut HashMap<String, u64>) {
-    if contacts.is_empty() {
-        println!("No contacts found.");
-    } else {
-        for (name, phone) in contacts.iter() {
-            println!("Name: {} - Phone: {}", name, phone);
+    match contacts.is_empty() {
+        true => println!("No contacts found."),
+        false => {
+            for (name, phone) in contacts.iter() {
+                println!("Name: {} - Phone: {}", name, phone);
+            }
         }
     }
     contact_book(contacts);
@@ -118,34 +124,45 @@ fn edit(contacts: &mut HashMap<String, u64>) {
     println!("Edit contact");
     let name: String = read_input("Name: ");
     
-    if name.is_empty() {
-        println!("Name is required.");
-        edit(contacts);
-    } else if name == "q" {
-        contact_book(contacts);
-    } else if let Some(phone) = contacts.get(&name) {
-        println!("Name: {} - Phone: {}", name, phone);
-        add_contact(contacts, name);
-    } else {
-        println!("Contact not found.");
-        edit(contacts);
+    match name.as_str() {
+        "" => {
+            println!("Name is required.");
+            edit(contacts);
+        },
+        "q" => contact_book(contacts),
+        _ => match contacts.get(&name) {
+            Some(phone) => {
+                println!("Name: {} - Phone: {}", name, phone);
+                add_contact(contacts, name);
+            },
+            None => {
+                println!("Contact not found.");
+                edit(contacts);
+            }
+        }
     }
 }
 
 fn delete(contacts: &mut HashMap<String, u64>) {
     println!("Delete contact");
-    let name: String = read_input("Name: ");
     
-    if name.is_empty() {
-        println!("Name is required.");
-        delete(contacts);
-    } else if name == "q" {
-        contact_book(contacts);
-    } else if let Some(_) = contacts.remove(&name) {
-        println!("Contact deleted successfully.");
-        contact_book(contacts);
-    } else {
-        println!("Contact not found.");
-        delete(contacts);
+    loop {
+        let name: String = read_input("Name: ");
+        
+        match name.as_str() {
+            "" => println!("Name is required."),
+            "q" => {
+                contact_book(contacts);
+                break;
+            },
+            _ => match contacts.remove(&name) {
+                Some(_) => {
+                    println!("Contact deleted successfully.");
+                    contact_book(contacts);
+                    break;
+                },
+                None => println!("Contact not found."),
+            }
+        }
     }
 }
